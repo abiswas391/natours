@@ -56,7 +56,7 @@ exports.createOne = Model =>
 exports.getOne = (Model, popOptions) =>
   catchAsync(async (req, res, next) => {
     let query = Model.findById(req.params.id);
-    console.log(req.params.id);
+    // console.log(req.params.id);
     if (popOptions) query = query.populate(popOptions);
     const doc = await query;
 
@@ -82,8 +82,8 @@ exports.getAll = Model =>
 
     // In case the route is similar to "Get all bookings on user"
     if (req.params.userId) filter = { user: req.params.userId };
-    console.log('Hello from the get all function');
-    console.log(req.params);
+    // console.log('Hello from the get all function');
+    // console.log(req.params);
 
     // Executing query
     const features = new APIFeatures(Model.find(filter), req.query)

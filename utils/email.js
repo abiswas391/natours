@@ -12,7 +12,7 @@ module.exports = class Email {
 
   newTransport() {
     if (process.env.NODE_ENV === 'development') {
-      console.log('Email sending through Sendgrid');
+      // console.log('Email sending through Sendgrid');
       // Sendgrid
       return nodemailer.createTransport({
         service: 'SendGrid',

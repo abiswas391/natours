@@ -35,8 +35,8 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
     client_reference_id: req.params.tourId
   });
 
-  console.log(tour);
-  console.log(session);
+  // console.log(tour);
+  // console.log(session);
 
   // 3) Create session as response
   res.status(200).json({
