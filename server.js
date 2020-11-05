@@ -32,7 +32,23 @@ const app = require('./app');
 // console.log(process.env);
 
 const port = process.env.PORT || 3000;
-app.listen(port, () => {
+
+const server = app.listen(port, () => {
   // eslint-disable-next-line no-console
   console.log(`App is running on port number ${port}...`);
+});
+
+process.on('unhandledRejection', err => {
+  console.log('Unhandled rejection! Shutting down...');
+  console.log(err.name, err.message);
+  server.close(() => {
+    process.exit(1);
+  });
+});
+
+process.on('SIGTERM', () => {
+  console.log('SIGTERM RECIEVED, Shutting down gracefully');
+  server.close(() => {
+    console.log('Process terminated');
+  });
 });

@@ -12,16 +12,22 @@ const generateToken = async id => {
   });
 };
 
-const createSendToken = async (user, statusCode, res) => {
+const createSendToken = async (user, statusCode, req, res) => {
   const token = await generateToken(user._id);
   const cookieOptions = {
     expires: new Date(
       Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
     ),
-    httpOnly: true
+    httpOnly: true,
+    // For checking the connection is secure or not
+    // this is only as a replacement of if (req.secure || req.headers('x-forwarded-proto') === 'https') cookieOptions.secure = true
+    secure: req.secure || req.headers('x-forwarded-proto') === 'https'
   };
 
-  if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+  // if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+
+  // For checking if the request is coming from https // For checking the connection is secure or not
+  // if (req.secure || req.headers('x-forwarded-proto') === 'https') cookieOptions.secure = true;
 
   res.cookie('jwt', token, cookieOptions);
 
@@ -54,7 +60,7 @@ exports.signUp = catchAsync(async (req, res, next) => {
   // console.log(url);
   await new Email(newUser, url).sendWelcome();
 
-  createSendToken(newUser, 201, res);
+  createSendToken(newUser, 201, req, res);
 
   // const token = await generateToken(newUser._id);
 
@@ -85,7 +91,7 @@ exports.login = catchAsync(async (req, res, next) => {
   }
 
   // 3) If everything is ok then send token to the client
-  createSendToken(user, 200, res);
+  createSendToken(user, 200, req, res);
 
   // const token = await generateToken(user._id);
 
@@ -287,7 +293,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   await user.save({ validateBeforeSave: true });
 
   // 4) Log the user in, send the token to the user
-  createSendToken(user, 200, res);
+  createSendToken(user, 200, req, res);
 
   // const token = await generateToken(user._id);
 
@@ -318,7 +324,7 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   await user.save({ validateBeforeSave: true });
 
   // 4) Log user in send the Token
-  createSendToken(user, 200, res);
+  createSendToken(user, 200, req, res);
 
   // const token = await generateToken(user._id);
 
