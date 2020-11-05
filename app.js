@@ -18,7 +18,7 @@ const reviewRouter = require('./routes/reviewRoutes');
 const bookingRouter = require('./routes/bookingRoutes');
 const viewRouter = require('./routes/viewRoutes');
 
-// Express application starting
+// Start express app
 const app = express();
 
 // To trust the proxy requests that heroku does for all the incoming requests
